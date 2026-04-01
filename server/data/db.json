@@ -2,7 +2,7 @@
   "teams": [
     {
       "id": 4,
-      "name": "CTO1",
+      "name": "CTO",
       "childTeamIds": [
         5
       ],
