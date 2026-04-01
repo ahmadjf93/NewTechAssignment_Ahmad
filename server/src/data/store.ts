@@ -2,10 +2,13 @@ import fs from 'fs/promises';
 import path from 'path';
 import { Database } from '../types';
 
+// Absolute path to the JSON database file on disk.
 const DB_PATH = path.join(__dirname, '..', '..', 'data', 'db.json');
 
+// Default empty database used on first run or parse failure.
 const emptyDb: Database = { teams: [], users: [], counters: { team: 0, user: 0 } };
 
+// Ensure the database file exists, creating directories and seed data if needed.
 async function ensureDbFile(): Promise<void> {
   try {
     await fs.access(DB_PATH);
@@ -15,6 +18,7 @@ async function ensureDbFile(): Promise<void> {
   }
 }
 
+// Read and parse the database JSON file with safe defaults.
 export async function readDb(): Promise<Database> {
   await ensureDbFile();
   const raw = await fs.readFile(DB_PATH, 'utf8');
@@ -30,6 +34,7 @@ export async function readDb(): Promise<Database> {
   }
 }
 
+// Serialize and persist the database JSON file.
 export async function writeDb(db: Database): Promise<void> {
   await ensureDbFile();
   await fs.writeFile(DB_PATH, JSON.stringify(db, null, 2), 'utf8');

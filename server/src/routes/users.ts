@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { createUser, deleteUser, getUserById, getUsersByName, updateUser } from '../services';
 
+// Users API router.
 const router = Router();
 
+// List users (optionally filtered by name).
 router.get('/', async (req, res) => {
   try {
     const { name } = req.query;
@@ -13,6 +15,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get a single user by id.
 router.get('/:id', async (req, res) => {
   try {
     const user = await getUserById(Number(req.params.id));
@@ -23,6 +26,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Create a user with optional team memberships.
 router.post('/', async (req, res) => {
   try {
     const { name, teamIds } = req.body as { name?: string; teamIds?: string[] };
@@ -36,6 +40,7 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Update a user's name or team memberships.
 router.patch('/:id', async (req, res) => {
   try {
     const { name, teamIds } = req.body as { name?: string; teamIds?: string[] };
@@ -49,6 +54,7 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
+// Delete a user by id.
 router.delete('/:id', async (req, res) => {
   try {
     await deleteUser(Number(req.params.id));
