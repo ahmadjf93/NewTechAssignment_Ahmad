@@ -4,7 +4,8 @@
       "id": 4,
       "name": "CTO",
       "childTeamIds": [
-        5
+        5,
+        10
       ],
       "childUserIds": [
         5
@@ -15,12 +16,12 @@
       "name": "Dev Managers",
       "parentId": 4,
       "childTeamIds": [
-        7,
-        8
+        7
       ],
       "childUserIds": [
         1,
-        4
+        4,
+        9
       ]
     },
     {
@@ -36,10 +37,23 @@
     {
       "id": 8,
       "name": "QA Team",
-      "parentId": 5,
+      "parentId": 10,
       "childTeamIds": [],
       "childUserIds": [
-        6
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "id": 10,
+      "name": "QA Manager",
+      "parentId": 4,
+      "childTeamIds": [
+        8
+      ],
+      "childUserIds": [
+        8
       ]
     }
   ],
@@ -85,10 +99,32 @@
       "teamIds": [
         8
       ]
+    },
+    {
+      "id": 7,
+      "name": "Ella",
+      "teamIds": [
+        8
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Emre",
+      "teamIds": [
+        10,
+        8
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Natan",
+      "teamIds": [
+        5
+      ]
     }
   ],
   "counters": {
-    "team": 9,
-    "user": 6
+    "team": 10,
+    "user": 9
   }
 }
