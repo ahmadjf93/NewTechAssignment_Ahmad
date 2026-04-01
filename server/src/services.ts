@@ -1,32 +1,38 @@
 import { readDb, writeDb } from './data/store';
 import { Database, Team, User } from './types';
 
+// Normalize user/team names before storage.
 function normalizeName(name: string): string {
   return name.trim();
 }
 
+// Filter collections by name when a search term is provided.
 function searchByName<T extends { name: string }>(items: T[], term?: string): T[] {
   if (!term) return items;
   const lowered = term.toLowerCase();
   return items.filter((item) => item.name.toLowerCase().includes(lowered));
 }
 
+// Persist the database to disk.
 async function save(db: Database): Promise<void> {
   await writeDb(db);
 }
 
+// Allocate the next team id, ensuring counters exist.
 function nextTeamId(db: Database): number {
   db.counters = db.counters ?? { team: 0, user: 0 };
   db.counters.team += 1;
   return db.counters.team;
 }
 
+// Allocate the next user id, ensuring counters exist.
 function nextUserId(db: Database): number {
   db.counters = db.counters ?? { team: 0, user: 0 };
   db.counters.user += 1;
   return db.counters.user;
 }
 
+// Find a team by id and ensure child arrays exist.
 function findTeam(db: Database, id: number): Team {
   const team = db.teams.find((t) => t.id === id);
   if (!team) throw new Error('Team not found');
@@ -35,6 +41,7 @@ function findTeam(db: Database, id: number): Team {
   return team;
 }
 
+// Find a user by id and ensure team array exists.
 function findUser(db: Database, id: number): User {
   const user = db.users.find((u) => u.id === id);
   if (!user) throw new Error('User not found');
@@ -42,6 +49,7 @@ function findUser(db: Database, id: number): User {
   return user;
 }
 
+// Validate that all team ids exist.
 function ensureTeamsExist(db: Database, ids: number[]): void {
   ids.forEach((id) => {
     const exists = db.teams.some((t) => t.id === id);
@@ -49,6 +57,7 @@ function ensureTeamsExist(db: Database, ids: number[]): void {
   });
 }
 
+// Remove a child team from any previous parent.
 function detachChildFromPreviousParent(db: Database, childId: number): void {
   db.teams.forEach((t) => {
     if (t.childTeamIds.includes(childId)) {
@@ -57,6 +66,7 @@ function detachChildFromPreviousParent(db: Database, childId: number): void {
   });
 }
 
+// Check if a team is a descendant of another team.
 function isDescendant(db: Database, rootId: number, searchFor: number): boolean {
   const root = db.teams.find((t) => t.id === rootId);
   if (!root) return false;
@@ -64,6 +74,7 @@ function isDescendant(db: Database, rootId: number, searchFor: number): boolean 
   return root.childTeamIds.some((cid) => isDescendant(db, cid, searchFor));
 }
 
+// Assign or remove a parent for a team while preventing cycles.
 function setTeamParent(db: Database, childId: number, parentId?: number): void {
   const child = findTeam(db, childId);
   if (parentId === childId) throw new Error('A team cannot be its own parent');
@@ -87,12 +98,14 @@ function setTeamParent(db: Database, childId: number, parentId?: number): void {
   }
 }
 
+// Remove a user id from all teams' child lists.
 function detachUserFromAllTeams(db: Database, userId: number): void {
   db.teams.forEach((t) => {
     t.childUserIds = t.childUserIds.filter((id) => id !== userId);
   });
 }
 
+// Replace a user's team memberships and update team child lists.
 function setUserTeams(db: Database, userId: number, teamIds: number[]): void {
   ensureTeamsExist(db, teamIds);
   const uniqueTeams = Array.from(new Set(teamIds));
@@ -107,6 +120,7 @@ function setUserTeams(db: Database, userId: number, teamIds: number[]): void {
   user.teamIds = uniqueTeams;
 }
 
+// Collect a team and all descendant team ids into a set.
 function collectDescendants(db: Database, id: number, acc: Set<number>): void {
   acc.add(id);
   const team = db.teams.find((t) => t.id === id);
@@ -114,6 +128,7 @@ function collectDescendants(db: Database, id: number, acc: Set<number>): void {
   team.childTeamIds.forEach((childId) => collectDescendants(db, childId, acc));
 }
 
+// Create a new team and optionally set its parent.
 export async function createTeam(name: string, parentId?: number): Promise<Team> {
   const cleanName = normalizeName(name);
   if (!cleanName) throw new Error('Team name is required');
@@ -130,6 +145,7 @@ export async function createTeam(name: string, parentId?: number): Promise<Team>
   return team;
 }
 
+// Update a team's name and/or parent.
 export async function updateTeam(id: number, updates: { name?: string; parentId?: number | null }): Promise<Team> {
   const db = await readDb();
   const team = findTeam(db, id);
@@ -149,16 +165,19 @@ export async function updateTeam(id: number, updates: { name?: string; parentId?
   return team;
 }
 
+// Fetch a team by id.
 export async function getTeamById(id: number): Promise<Team | undefined> {
   const db = await readDb();
   return db.teams.find((t) => t.id === id);
 }
 
+// Fetch teams filtered by name (case-insensitive).
 export async function getTeamsByName(name?: string): Promise<Team[]> {
   const db = await readDb();
   return searchByName(db.teams, name);
 }
 
+// Create a new user and attach to teams.
 export async function createUser(name: string, teamIds: number[] = []): Promise<User> {
   const cleanName = normalizeName(name);
   if (!cleanName) throw new Error('User name is required');
@@ -179,6 +198,7 @@ export async function createUser(name: string, teamIds: number[] = []): Promise<
   return user;
 }
 
+// Update a user's name and/or team memberships.
 export async function updateUser(id: number, updates: { name?: string; teamIds?: number[] }): Promise<User> {
   const db = await readDb();
   const user = findUser(db, id);
@@ -197,16 +217,19 @@ export async function updateUser(id: number, updates: { name?: string; teamIds?:
   return user;
 }
 
+// Fetch a user by id.
 export async function getUserById(id: number): Promise<User | undefined> {
   const db = await readDb();
   return db.users.find((u) => u.id === id);
 }
 
+// Fetch users filtered by name (case-insensitive).
 export async function getUsersByName(name?: string): Promise<User[]> {
   const db = await readDb();
   return searchByName(db.users, name);
 }
 
+// Attach an existing team as a child of another team.
 export async function attachChildTeam(parentId: number, childTeamId: number): Promise<Team> {
   const db = await readDb();
   setTeamParent(db, childTeamId, parentId);
@@ -214,6 +237,7 @@ export async function attachChildTeam(parentId: number, childTeamId: number): Pr
   return findTeam(db, parentId);
 }
 
+// Attach a user to a team.
 export async function attachChildUser(parentId: number, childUserId: number): Promise<Team> {
   const db = await readDb();
   const parent = findTeam(db, parentId);
@@ -222,6 +246,7 @@ export async function attachChildUser(parentId: number, childUserId: number): Pr
   return parent;
 }
 
+// Delete a team and its descendants, removing all references.
 export async function deleteTeam(id: number): Promise<void> {
   const db = await readDb();
   const target = db.teams.find((t) => t.id === id);
@@ -246,6 +271,7 @@ export async function deleteTeam(id: number): Promise<void> {
   await save(db);
 }
 
+// Delete a user and remove from all teams.
 export async function deleteUser(id: number): Promise<void> {
   const db = await readDb();
   const initialLength = db.users.length;

@@ -9,8 +9,10 @@ import {
   updateTeam,
 } from '../services';
 
+// Teams API router.
 const router = Router();
 
+// List teams (optionally filtered by name).
 router.get('/', async (req, res) => {
   try {
     const { name } = req.query;
@@ -21,6 +23,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get a single team by id.
 router.get('/:id', async (req, res) => {
   try {
     const team = await getTeamById(Number(req.params.id));
@@ -31,6 +34,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Create a team (optionally with a parent).
 router.post('/', async (req, res) => {
   try {
     const { name, parentId } = req.body;
@@ -41,6 +45,7 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Update a team's name or parent.
 router.patch('/:id', async (req, res) => {
   try {
     const { name, parentId } = req.body as { name?: string; parentId?: string | null };
@@ -54,6 +59,7 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
+// Attach a child team or child user to a team.
 router.post('/:id/children', async (req, res) => {
   try {
     const { childTeamId, childUserId } = req.body as { childTeamId?: string; childUserId?: string };
@@ -72,6 +78,7 @@ router.post('/:id/children', async (req, res) => {
   }
 });
 
+// Delete a team and its descendants.
 router.delete('/:id', async (req, res) => {
   try {
     await deleteTeam(Number(req.params.id));

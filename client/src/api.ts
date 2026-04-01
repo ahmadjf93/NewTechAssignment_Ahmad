@@ -1,7 +1,9 @@
 import { Team, User } from './types';
 
+// Use env-configured API base when available, default to local server.
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000';
 
+// Shared request helper with JSON handling and error propagation.
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     headers: { 'Content-Type': 'application/json' },
@@ -16,6 +18,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return (await res.json()) as T;
 }
 
+// Teams endpoints.
 export async function createTeam(payload: { name: string; parentId?: number | null }): Promise<Team> {
   return request<Team>('/teams', { method: 'POST', body: JSON.stringify(payload) });
 }
@@ -37,6 +40,7 @@ export async function deleteTeam(id: number): Promise<void> {
   await request<void>(`/teams/${id}`, { method: 'DELETE' });
 }
 
+// Users endpoints.
 export async function createUser(payload: { name: string; teamIds: number[] }): Promise<User> {
   return request<User>('/users', { method: 'POST', body: JSON.stringify(payload) });
 }

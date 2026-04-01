@@ -4,6 +4,7 @@ import { Button as UiButton, Card as UiCard, Input as UiInput } from '@newtech/u
 import { createTeam, createUser, deleteTeam, deleteUser, getTeam, getTeams, getUser, getUsers, updateTeam, updateUser } from './api';
 import { Team, User } from './types';
 
+// Controls the create/edit modal state for teams and users.
 type ModalState =
   | { type: 'team'; mode: 'create'; data: { name: string; parentId: number | null } }
   | { type: 'team'; mode: 'edit'; data: { id: number; name: string; parentId: number | null } }
@@ -12,6 +13,7 @@ type ModalState =
   | null;
 
 export default function App() {
+  // Global app state.
   const [teams, setTeams] = useState<Team[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -30,10 +32,12 @@ export default function App() {
   const [userSearchCollapsed, setUserSearchCollapsed] = useState(true);
   const [teamSearchCollapsed, setTeamSearchCollapsed] = useState(true);
 
+  // Derived maps and collapse flags.
   const teamsById = useMemo(() => new Map(teams.map((t) => [t.id, t])), [teams]);
   const [teamsCollapsed, setTeamsCollapsed] = useState(true);
   const [usersCollapsed, setUsersCollapsed] = useState(true);
 
+  // Load initial data for teams and users.
   async function loadData() {
     try {
       setError(null);
@@ -49,6 +53,7 @@ export default function App() {
     loadData();
   }, []);
 
+  // Tree layout state and refs.
   const rootParents = useMemo(() => teams.filter((t) => !t.parentId), [teams]);
   const treeRef = useRef<HTMLDivElement | null>(null);
   const [treeTranslate, setTreeTranslate] = useState<{ x: number; y: number }>({ x: 400, y: 60 });
@@ -58,6 +63,7 @@ export default function App() {
   const nodeSize = { x: 200, y: 140 };
   const separation = { siblings: 1.3, nonSiblings: 1.8 };
 
+  // Track tree container size and react to resize events.
   useEffect(() => {
     if (!treeRef.current) return;
     const element = treeRef.current;
@@ -80,6 +86,7 @@ export default function App() {
     };
   }, []);
 
+  // Build tree nodes from teams and users.
   const treeData = useMemo(() => {
     const buildNode = (team: Team): any => {
       const childTeams = team.childTeamIds.map((id) => teamsById.get(id)).filter(Boolean) as Team[];
@@ -104,6 +111,7 @@ export default function App() {
     return rootParents.length ? rootParents.map((r) => buildNode(r)) : [];
   }, [rootParents, teamsById, users]);
 
+  // Compute tree depth for zoom and layout decisions.
   const maxDepth = useMemo(() => {
     const depthOf = (node: any): number => {
       if (!node?.children || node.children.length === 0) return 1;
@@ -112,6 +120,7 @@ export default function App() {
     return treeData.length ? Math.max(...treeData.map(depthOf)) : 0;
   }, [treeData]);
 
+  // Compute tree breadth for zoom and layout decisions.
   const treeBreadth = useMemo(() => {
     const levelCounts = new Map<number, number>();
     const visit = (node: any, level: number) => {
@@ -122,6 +131,7 @@ export default function App() {
     return levelCounts.size ? Math.max(...levelCounts.values()) : 0;
   }, [treeData]);
 
+  // Update zoom and translate to fit the available space.
   useEffect(() => {
     const width = treeSize.width || 800;
     const height = treeSize.height || 420;
@@ -135,11 +145,13 @@ export default function App() {
     setTreeTranslate({ x: width / 2, y: 60 });
   }, [treeSize, treeBreadth, maxDepth, nodeSize.x, nodeSize.y, separation.siblings, separation.nonSiblings]);
 
+  // Keep the tree canvas at a fixed baseline height.
   useEffect(() => {
     // Keep canvas at baseline height; we rely on initial zoom to fit content.
     setTreeHeight(420);
   }, [maxDepth]);
 
+  // Custom SVG node renderer for react-d3-tree.
   const renderTreeNode = (rd3tProps: any) => {
     const { nodeDatum } = rd3tProps;
     const isUser = nodeDatum.attributes?.Type === 'User';
@@ -196,6 +208,7 @@ export default function App() {
     );
   };
 
+  // Modal open helpers.
   function openCreateTeam() {
     setModal({ type: 'team', mode: 'create', data: { name: '', parentId: null } });
   }
@@ -212,6 +225,7 @@ export default function App() {
     setModal({ type: 'user', mode: 'edit', data: { id: user.id, name: user.name, teamIds: user.teamIds ?? [] } });
   }
 
+  // Persist team changes and reload lists.
   async function handleSaveTeam(data: { id?: number; name: string; parentId: number | null }) {
     try {
       setBusy(true);
@@ -229,6 +243,7 @@ export default function App() {
     }
   }
 
+  // Persist user changes and reload lists.
   async function handleSaveUser(data: { id?: number; name: string; teamIds: number[] }) {
     try {
       setBusy(true);
@@ -246,6 +261,7 @@ export default function App() {
     }
   }
 
+  // Delete a team and refresh the data.
   async function handleDeleteTeam(id: number) {
     const team = teamsById.get(id);
     const confirmMessage = team
@@ -263,6 +279,7 @@ export default function App() {
     }
   }
 
+  // Delete a user and refresh the data.
   async function handleDeleteUser(id: number) {
     const user = users.find((u) => u.id === id);
     const confirmMessage = user ? `Delete user "${user.name}"?` : 'Delete user?';
@@ -278,6 +295,7 @@ export default function App() {
     }
   }
 
+  // Deduplicate results by id.
   function dedupeById<T extends { id: number }>(items: T[]): T[] {
     const seen = new Set<number>();
     const unique: T[] = [];
@@ -290,6 +308,7 @@ export default function App() {
     return unique;
   }
 
+  // Search users by id or name.
   async function handleUserSearch() {
     if (!searchUserId && !searchUserName) {
       setUserSearchError('Enter user ID or name.');
@@ -319,6 +338,7 @@ export default function App() {
     }
   }
 
+  // Search teams by id or name.
   async function handleTeamSearch() {
     if (!searchTeamId && !searchTeamName) {
       setTeamSearchError('Enter team ID or name.');
@@ -348,6 +368,7 @@ export default function App() {
     }
   }
 
+  // Clear user search filters and results.
   function clearUserSearch() {
     setSearchUserId('');
     setSearchUserName('');
@@ -355,6 +376,7 @@ export default function App() {
     setUserSearchError(null);
   }
 
+  // Clear team search filters and results.
   function clearTeamSearch() {
     setSearchTeamId('');
     setSearchTeamName('');
@@ -364,6 +386,7 @@ export default function App() {
 
   // org chart now rendered via react-d3-tree
 
+  // Collect all descendant team ids for exclusion lists.
   function collectDescendants(startId: number, acc: Set<number>) {
     const start = teamsById.get(startId);
     if (!start) return;
@@ -375,6 +398,7 @@ export default function App() {
     });
   }
 
+  // Available parent teams, excluding the current team and descendants.
   const parentOptions = useMemo(() => {
     const exclude = new Set<number>();
     if (modal?.type === 'team' && 'id' in modal.data && modal.data.id != null) {
@@ -384,6 +408,7 @@ export default function App() {
     return teams.filter((t) => !exclude.has(t.id));
   }, [teams, modal]);
 
+  // Main UI.
   return (
     <main>
       <header>

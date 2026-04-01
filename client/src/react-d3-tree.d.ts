@@ -1,3 +1,4 @@
+// Local type definitions for react-d3-tree.
 declare module 'react-d3-tree' {
   import * as React from 'react';
 

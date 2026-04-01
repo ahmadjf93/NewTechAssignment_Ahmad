@@ -1,3 +1,4 @@
+// Team entity used by the client UI.
 export type Team = {
   id: number;
   name: string;
@@ -6,6 +7,7 @@ export type Team = {
   childUserIds: number[];
 };
 
+// User entity used by the client UI.
 export type User = {
   id: number;
   name: string;

@@ -1,3 +1,4 @@
+/* Global defaults */
 * { box-sizing: border-box; }
 body {
   margin: 0;
@@ -10,6 +11,8 @@ main {
   margin: 0 auto;
   padding: 32px 20px 80px;
 }
+
+/* Layout structure */
 header {
   display: flex;
   align-items: center;
@@ -18,6 +21,8 @@ header {
   flex-wrap: wrap;
   margin-bottom: 12px;
 }
+
+/* Panels and containers */
 section {
   background: #0f142b;
   border: 1px solid #1f2648;
@@ -26,6 +31,8 @@ section {
   margin-top: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
+
+/* Typography */
 h1 {
   margin: 0 0 4px;
   font-size: 26px;
@@ -37,6 +44,8 @@ h2 {
 h3 {
   margin: 0 0 12px;
 }
+
+/* Form controls */
 input, select, button {
   border-radius: 10px;
   border: 1px solid #2b3660;
@@ -45,6 +54,8 @@ input, select, button {
   padding: 10px 12px;
   min-width: 140px;
 }
+
+/* Buttons */
 button {
   cursor: pointer;
   background: linear-gradient(135deg, #5c7cfa, #4c6ef5);
@@ -71,6 +82,8 @@ button.ghost {
   padding: 10px;
   font-size: 16px;
 }
+
+/* Grids and lists */
 .two-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -88,6 +101,8 @@ button.ghost {
   gap: 12px;
   margin-top: 12px;
 }
+
+/* Cards and badges */
 .card {
   border: 1px solid #1f2a4d;
   border-radius: 12px;
@@ -114,6 +129,8 @@ button.ghost {
   font-size: 12px;
   margin-right: 6px;
 }
+
+/* Utility layout */
 .row {
   display: flex;
   align-items: center;
@@ -131,6 +148,8 @@ button.ghost {
   background: #0c1126;
   color: #c4ceff;
 }
+
+/* Modal styles */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -191,6 +210,8 @@ button.ghost {
   align-items: center;
   gap: 8px;
 }
+
+/* Tree layout styles */
 .tree {
   list-style: none;
   padding-left: 0;
