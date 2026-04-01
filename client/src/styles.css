@@ -1,0 +1,219 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at 20% 20%, #16204b 0, #0a0f23 40%, #080b17 80%);
+  color: #f5f6fb;
+}
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+section {
+  background: #0f142b;
+  border: 1px solid #1f2648;
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+h1 {
+  margin: 0 0 4px;
+  font-size: 26px;
+}
+h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+h3 {
+  margin: 0 0 12px;
+}
+input, select, button {
+  border-radius: 10px;
+  border: 1px solid #2b3660;
+  background: #0f1530;
+  color: #f5f6fb;
+  padding: 10px 12px;
+  min-width: 140px;
+}
+button {
+  cursor: pointer;
+  background: linear-gradient(135deg, #5c7cfa, #4c6ef5);
+  border: none;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+button:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+button.ghost {
+  background: transparent;
+  border: 1px solid #2b3660;
+}
+.icon-btn {
+  width: 44px;
+  min-width: 44px;
+  padding: 10px;
+  font-size: 16px;
+}
+.two-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+}
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.card {
+  border: 1px solid #1f2a4d;
+  border-radius: 12px;
+  padding: 12px;
+  background: #0c1126;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #1f2a4d;
+  font-size: 12px;
+  color: #c4ceff;
+  margin-right: 6px;
+}
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #26346e;
+  font-size: 12px;
+  margin-right: 6px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.small {
+  font-size: 13px;
+  color: #c4ceff;
+}
+.empty {
+  padding: 12px;
+  border: 1px dashed #2b3660;
+  border-radius: 10px;
+  background: #0c1126;
+  color: #c4ceff;
+}
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 5, 12, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 10;
+}
+.modal {
+  background: #0f142b;
+  border: 1px solid #1f2a4d;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 320px;
+  max-width: 460px;
+  position: relative;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
+}
+.close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: right;
+  background: transparent;
+  border: none;
+  color: #f5f6fb;
+  font-size: 20px;
+  cursor: pointer;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+.checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border: 1px dashed #2b3660;
+  border-radius: 10px;
+  background: #0c1126;
+}
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tree {
+  list-style: none;
+  padding-left: 0;
+}
+.tree ul {
+  list-style: none;
+  padding-left: 20px;
+  margin: 6px 0 0;
+  border-left: 1px solid #26346e;
+}
+.tree-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tree-wrapper {
+  height: 420px;
+  background: #ffffff;
+  border: 1px solid #1f2a4d;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+.tree-wrapper .empty {
+  margin: 12px;
+}

@@ -1,0 +1,94 @@
+{
+  "teams": [
+    {
+      "id": 4,
+      "name": "CTO",
+      "childTeamIds": [
+        5
+      ],
+      "childUserIds": [
+        5
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Dev Managers",
+      "parentId": 4,
+      "childTeamIds": [
+        7,
+        8
+      ],
+      "childUserIds": [
+        1,
+        4
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Dev Team",
+      "parentId": 5,
+      "childTeamIds": [],
+      "childUserIds": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 8,
+      "name": "QA Team",
+      "parentId": 5,
+      "childTeamIds": [],
+      "childUserIds": [
+        6
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Ed",
+      "teamIds": [
+        5
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Ahmad",
+      "teamIds": [
+        7
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Farouk",
+      "teamIds": [
+        7
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Carolina",
+      "teamIds": [
+        5
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Andy",
+      "teamIds": [
+        4
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Amer",
+      "teamIds": [
+        8
+      ]
+    }
+  ],
+  "counters": {
+    "team": 9,
+    "user": 6
+  }
+}
