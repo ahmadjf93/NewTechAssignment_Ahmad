@@ -1,0 +1,125 @@
+.nt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--control-radius);
+  border: 1px solid var(--control-border);
+  background: linear-gradient(135deg, var(--primary-strong), var(--primary));
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: opacity 120ms ease, transform 120ms ease;
+  text-decoration: none;
+}
+.nt-btn:hover:not(:disabled) { opacity: 0.92; transform: translateY(-1px); }
+.nt-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.nt-btn.ghost { background: transparent; border: 1px solid var(--control-border); }
+.nt-btn.sm { padding: 8px 12px; font-size: 14px; }
+
+.nt-label { font-size: 14px; color: var(--text); margin-bottom: 6px; display: inline-block; }
+.nt-field { display: flex; flex-direction: column; gap: 6px; }
+.nt-input, .nt-select {
+  border-radius: var(--control-radius);
+  border: 1px solid var(--control-border);
+  background: var(--control-bg);
+  color: var(--text);
+  padding: 10px 12px;
+  min-width: 180px;
+}
+.nt-helper { font-size: 12px; color: var(--text-muted); }
+
+.nt-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nt-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.nt-card {
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  background: var(--bg-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow);
+}
+
+.nt-section {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.nt-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--badge);
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-right: 6px;
+}
+
+.nt-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--pill);
+  font-size: 12px;
+  color: var(--text);
+  margin-right: 6px;
+}
+
+.nt-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 20;
+}
+.nt-modal {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  min-width: 320px;
+  max-width: 520px;
+  box-shadow: var(--modal-shadow);
+}
+.nt-modal h3 { margin: 0 0 12px; }
+.nt-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.nt-form { display: flex; flex-direction: column; gap: 12px; }
+
+.nt-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border: 1px dashed var(--control-border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+}
+
+.nt-divider { height: 1px; width: 100%; background: var(--panel-border); }

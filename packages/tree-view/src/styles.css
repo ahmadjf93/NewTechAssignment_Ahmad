@@ -1,0 +1,17 @@
+.nt-tree-wrapper {
+  height: 420px;
+  background: #ffffff;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.nt-tree-empty {
+  margin: 12px;
+  padding: 12px;
+  border: 1px dashed var(--control-border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+  color: var(--text-muted);
+}
