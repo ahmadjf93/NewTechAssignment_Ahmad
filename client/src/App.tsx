@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Tree from 'react-d3-tree';
+import Tree, { type RawNodeDatum } from 'react-d3-tree';
 import { Button as UiButton, Card as UiCard, Input as UiInput } from '@newtech/ui-core';
 import { createTeam, createUser, deleteTeam, deleteUser, getTeam, getTeams, getUser, getUsers, updateTeam, updateUser } from './api';
 import { Team, User } from './types';
@@ -88,7 +88,7 @@ export default function App() {
 
   // Build tree nodes from teams and users.
   const treeData = useMemo(() => {
-    const buildNode = (team: Team): any => {
+    const buildNode = (team: Team): RawNodeDatum => {
       const childTeams = team.childTeamIds.map((id) => teamsById.get(id)).filter(Boolean) as Team[];
       const childUsers = users.filter((u) => u.teamIds?.includes(team.id));
       return {
@@ -113,7 +113,7 @@ export default function App() {
 
   // Compute tree depth for zoom and layout decisions.
   const maxDepth = useMemo(() => {
-    const depthOf = (node: any): number => {
+    const depthOf = (node: RawNodeDatum): number => {
       if (!node?.children || node.children.length === 0) return 1;
       return 1 + Math.max(...node.children.map(depthOf));
     };
@@ -123,9 +123,9 @@ export default function App() {
   // Compute tree breadth for zoom and layout decisions.
   const treeBreadth = useMemo(() => {
     const levelCounts = new Map<number, number>();
-    const visit = (node: any, level: number) => {
+    const visit = (node: RawNodeDatum, level: number) => {
       levelCounts.set(level, (levelCounts.get(level) || 0) + 1);
-      node?.children?.forEach((child: any) => visit(child, level + 1));
+      node?.children?.forEach((child) => visit(child, level + 1));
     };
     treeData.forEach((root) => visit(root, 0));
     return levelCounts.size ? Math.max(...levelCounts.values()) : 0;
@@ -152,7 +152,7 @@ export default function App() {
   }, [maxDepth]);
 
   // Custom SVG node renderer for react-d3-tree.
-  const renderTreeNode = (rd3tProps: any) => {
+  const renderTreeNode = (rd3tProps: { nodeDatum: RawNodeDatum }) => {
     const { nodeDatum } = rd3tProps;
     const isUser = nodeDatum.attributes?.Type === 'User';
     const boxWidth = 150;
@@ -454,13 +454,13 @@ export default function App() {
                   label="User ID"
                   type="number"
                   value={searchUserId}
-                  onChange={(e) => setSearchUserId(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchUserId(e.target.value)}
                   placeholder="e.g. 1"
                 />
                 <UiInput
                   label="User name"
                   value={searchUserName}
-                  onChange={(e) => setSearchUserName(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchUserName(e.target.value)}
                   placeholder="e.g. Alice"
                 />
               </div>
@@ -523,13 +523,13 @@ export default function App() {
                   label="Team ID"
                   type="number"
                   value={searchTeamId}
-                  onChange={(e) => setSearchTeamId(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTeamId(e.target.value)}
                   placeholder="e.g. 2"
                 />
                 <UiInput
                   label="Team name"
                   value={searchTeamName}
-                  onChange={(e) => setSearchTeamName(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTeamName(e.target.value)}
                   placeholder="e.g. Dev"
                 />
               </div>
