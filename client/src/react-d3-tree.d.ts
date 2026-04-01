@@ -19,8 +19,8 @@ declare module 'react-d3-tree' {
     zoomable?: boolean;
     collapsible?: boolean;
     pathFunc?: 'diagonal' | 'elbow' | 'straight' | 'step';
-    styles?: any;
-    renderCustomNodeElement?: (rd3tProps: any) => React.ReactNode;
+    styles?: Record<string, unknown>;
+    renderCustomNodeElement?: (rd3tProps: { nodeDatum: RawNodeDatum; [key: string]: unknown }) => React.ReactNode;
   } & React.SVGProps<SVGSVGElement>;
 
   const Tree: React.ComponentType<TreeProps>;
